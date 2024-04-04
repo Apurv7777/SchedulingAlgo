@@ -42,13 +42,6 @@ void printTable(vector<Process> P){
     }
 }
 
-void printArr(int arr[]){
-    for(int i=0;i<n;i++){
-        cout<<arr[i]<<" ";
-    }
-    cout<<endl;
-}
-
 int getSmallest(int *arr, map<int,bool> &m){
     int min = arr[0];
     int minIndex=0;
