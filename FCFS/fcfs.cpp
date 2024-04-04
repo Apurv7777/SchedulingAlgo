@@ -5,6 +5,7 @@
 #include <algorithm>
 #include<map>
 #include <set>
+#include<climits>
 
 using namespace std;
 
@@ -206,10 +207,11 @@ void printLines(int w[][3], vector<int> gchart, string pname[],int &k, int manip
     if(newLine[k]){
         k=0;
     }
+    int beforeK = k;
     printLine1(w,k,manip,delta,flag,newLine);
     cout<<endl;
     if(!newLine[k-1] && changed){
-        k--;
+        k=beforeK;
     } else {
         k=0;
     }
@@ -218,7 +220,7 @@ void printLines(int w[][3], vector<int> gchart, string pname[],int &k, int manip
     printLine2(w,pname,k,manip,delta,flag,newLine);
     
     if(!newLine[k-1] && changed){
-        k--;
+        k=beforeK;
     } else {
         k=0;
     }
@@ -227,7 +229,7 @@ void printLines(int w[][3], vector<int> gchart, string pname[],int &k, int manip
     flag=false;
     printLine3(w,k,manip,delta,flag,newLine);
     if(!newLine[k-1] && changed){
-        k--;
+        k=beforeK;
     } else {
         k=0;
     }
@@ -245,9 +247,9 @@ void printGanttChart(int arr[],int elem[],int bt[], string pname[], vector<int> 
     int k=0;
     int sum=0;
     for(int i=0;i<manip;i++){
-        sum+=bt[i];
-        if(sum>=200){
-            newLine[i]=true;
+        sum+=w[i][0];
+        if(sum>=50){
+            newLine[i+1]=true;
             sum=0;
         }
     }
@@ -277,7 +279,7 @@ int main() {
     cout<<"+----------------------------+"<<endl;
     if(n<=0){
         cout<<"Please enter positive integer !!";
-        return -1;
+        exit(0);
     }
     vector<Process> P;
     int at[n];
@@ -285,8 +287,16 @@ int main() {
     for(int i=0;i<n;i++){
         cout<<"  Enter arrival time of P"<<i+1<<" : ";
         cin>>at[i];
+        if(at[i]<0){
+            cout<<"Please enter positive arrival time !!";
+            exit(0);
+        }
         cout<<"  Enter burst time of P"<<i+1<<" : ";
         cin>>bt[i];
+        if(bt[i]<0){
+            cout<<"Please enter positive burst time !!";
+            exit(0);
+        }
         cout<<"+----------------------------+"<<endl;
         Process p(at[i],bt[i]);
         P.push_back(p);
@@ -320,8 +330,11 @@ int main() {
         }
     }
     vector<int> gchart;
-    
-    gchart.push_back(0);
+
+    if(elem[0]!=0)
+        gchart.push_back(elem[0]);
+    else
+        gchart.push_back(0);
     
     int k = 0;
     vector<bool> delta;
@@ -329,7 +342,7 @@ int main() {
     for(int i=1;i<=n;i++){
         gchart.push_back(0);
         gchart[gchart.size()-1] = gchart[gchart.size()-2];
-        if(gchart[gchart.size()-1]!=0 && gchart[gchart.size()-1]<=elem[k]){
+        if(gchart[gchart.size()-1]!=0 && gchart[gchart.size()-1]<elem[k]){
             int j = elem[k]-gchart[gchart.size()-1];
             while(j>0){
                 gchart[gchart.size()-1] ++;
@@ -338,6 +351,7 @@ int main() {
             gchart.push_back(gchart[gchart.size()-1]);
             delta.push_back(true);
         } 
+        
         gchart[gchart.size()-1] += bt[arr[k++]];
         delta.push_back(false);
         P[arr[k-1]].ft = gchart[gchart.size()-1];
@@ -347,4 +361,3 @@ int main() {
     getCalc(P);
     return 0;
 }
-
