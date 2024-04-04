@@ -1,9 +1,10 @@
-# First-Come, First-Served (FCFS) Scheduling Algorithm Implementation
+# First-Come, First-Served (FCFS) Scheduling Algorithm Implementation (Using Gantt Chart)
 
-This repository contains a C++ program that demonstrates the First-Come, First-Served (FCFS) scheduling algorithm. In this algorithm, processes are executed in the order they arrive. The program allows the user to input the number of processes along with their arrival time and burst time in milliseconds. It then generates a Gantt chart showing the order of execution of processes (limited to processes with burst time less than 90,000 milliseconds) and calculates the average turnaround time and waiting time.
+This repository contains a C++ program that demonstrates the First-Come, First-Served (FCFS) scheduling algorithm. In this algorithm, processes are executed in the order they arrive. The program allows the user to input the number of processes along with their arrival time and burst time in milliseconds. It then generates a Gantt chart showing the order of execution of processes and calculates the Average Turnaround time and Waiting time.
 
 ## Requirements
 
+- VSCode (Recommended)
 - C++ compiler (supporting C++11 or later)
 - Terminal or command prompt
 
@@ -28,6 +29,10 @@ fcfs
 
 6. View the generated Gantt chart and the calculated average turnaround time and waiting time.
 
+## Note
+
+- If there is &Delta; symbol in the Gantt Chart, it is representing time till CPU remains idle.
+  
 ## Constraints
 
 - The program accepts only millisecond values for arrival time and burst time.
