@@ -21,7 +21,7 @@ cd SchedulingAlgo/FCFS
 
 3. Compile the program and run the executable :
 ```
-./fcfs
+fcfs
 ```
 
 5. Follow the prompts to enter the number of processes, arrival time, and burst time for each process (in milliseconds).
