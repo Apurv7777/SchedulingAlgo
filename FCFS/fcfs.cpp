@@ -46,11 +46,11 @@ int getSmallest(int *arr, map<int,bool> &m){
     int min = arr[0];
     int minIndex=0;
     for(int i=1;i<n;i++){
-        if(arr[i] < min && m[arr[i]]!=true){
+        if(arr[i] < min && m[i]!=true){
             min = arr[i];
             minIndex = i;
         } 
-        if(m[arr[i]]==true && arr[i]!=INT_MAX){
+        if(m[i]==true && arr[i]!=INT_MAX){
             min = arr[i];
             minIndex = i;
         }
@@ -95,102 +95,75 @@ void getWidth(int w[][3],int elem[],int arr[]){
     }
 }    
 
-void printLine1(int w[][3],int &i, int &manip,vector<bool> delta,bool &flag,bool *newLine){
+void printLine1(int w[][3],int &i, int &manip,vector<bool> delta,bool *newLine,int &pno){
     if(i==manip){
         return;
     }
     if(delta[i]){
         cout<<setfill('-')<<setw(3)<<'+';
-        flag=true;
     }else{
-        if(flag){
-            i--;
-            manip--;
-            flag=false;
-        }
-        if(newLine[i]){
+        if(newLine[i])
             return;
-        } else {
-        cout<<setfill('-')<<setw(w[i][0])<<'+';
-        }
+
+        cout<<setfill('-')<<setw(w[pno++][0])<<'+';
     }
     i++;
-    printLine1(w,i,manip,delta,flag,newLine);
+    printLine1(w,i,manip,delta,newLine,pno);
 }
 
-void printLine2(int w[][3],string pname[],int &i,int &manip,vector<bool> delta,bool &flag,bool *newLine){
+void printLine2(int w[][3],string pname[],int &i,int &manip,vector<bool> delta,bool *newLine,int &pno){
     if(i==manip){
         return;
     }
     if(delta[i]){
         cout<<right<<setfill(' ')<<setw(3)<<"\u0394"<<right<<setfill(' ')<<setw(1)<<"|";
-        flag=true;
-        manip++;
     } else {
-        if(flag){
-            i--;
-            manip--;
-            flag=false;
-        }
-        if(newLine[i]){ 
+        if(newLine[i])
             return;
-        }else{ 
-            cout<<right<<setfill(' ')<<setw(w[i][1])<< pname[i] <<right<<setfill(' ')<<setw(w[i][2])<<"|";
-        }
+       
+        cout<<right<<setfill(' ')<<setw(w[pno][1])<< pname[pno] <<right<<setfill(' ')<<setw(w[pno++][2])<<"|";
+        
     }
     i++;
-    printLine2(w,pname,i,manip,delta,flag,newLine);
+    printLine2(w,pname,i,manip,delta,newLine,pno);
 }
 
-void printLine3(int w[][3], int &i, int &manip,vector<bool> delta,bool &flag,bool *newLine){
+void printLine3(int w[][3], int &i, int &manip,vector<bool> delta,bool *newLine,int &pno){
     if(i==manip){
         return;
     }
     if(delta[i]){
         cout<<setfill('-')<<setw(3)<<'+';
-        flag=true;
-        manip++;
+    
     }else{
-        if(flag){
-            i--;
-            manip--;
-            flag=false;
-        }
-        if(newLine[i]){
+    
+        if(newLine[i])
             return;
-        }else {
-        cout<<setfill('-')<<setw(w[i][0])<<'+';
-        }
+        
+        cout<<setfill('-')<<setw(w[pno++][0])<<'+';
+        
     }
-    i+=1;
-    printLine3(w,i,manip,delta,flag,newLine);
+    i++;
+    printLine3(w,i,manip,delta,newLine,pno);
 }
 
-void printLine4(int w[][3], vector<int> gchart,int &i,int &manip,vector<bool> delta,bool &flag,bool *newLine){
+void printLine4(int w[][3], vector<int> gchart,int &i,int &manip,vector<bool> delta,bool *newLine,int &pno){
     if(i==manip){
         return;
     }
     if(delta[i]){
         cout<<setfill(' ')<<setw(3)<<gchart[i+1];
-        flag = true;
-        manip++;
     } else {
-            if(newLine[i]){
-                return;
-            } else {
-        if(flag){
-            cout<<setfill(' ')<<setw(w[i-1][0])<<gchart[i+1];
-        } else {
-            cout<<setfill(' ')<<setw(w[i][0])<<gchart[i+1];
-        }
-        }
+        if(newLine[i])
+            return;
+
+        cout<<setfill(' ')<<setw(w[pno++][0])<<gchart[i+1];
     }
-    i+=1;
-    printLine4(w,gchart,i,manip,delta,flag,newLine);
+    i++;
+    printLine4(w,gchart,i,manip,delta,newLine,pno);
 }
 
-void printLines(int w[][3], vector<int> gchart, string pname[],int &k, int manip,vector<bool> delta,bool *newLine){
-    bool flag=false;
+void printLines(int w[][3], vector<int> gchart, string pname[],int &k, int manip,vector<bool> delta,bool *newLine,int &pno){
     cout<<'+';
     bool changed = false;
     if(newLine[k]){
@@ -201,35 +174,37 @@ void printLines(int w[][3], vector<int> gchart, string pname[],int &k, int manip
         k=0;
     }
     int beforeK = k;
-    printLine1(w,k,manip,delta,flag,newLine);
+    printLine1(w,k,manip,delta,newLine,pno);
     cout<<endl;
     if(!newLine[k-1] && changed){
         k=beforeK;
+        pno=beforeK;
     } else {
+        pno=0;
         k=0;
     }
     cout<<'|';
-    flag=false;
-    printLine2(w,pname,k,manip,delta,flag,newLine);
-    
+    printLine2(w,pname,k,manip,delta,newLine,pno);
     if(!newLine[k-1] && changed){
         k=beforeK;
+        pno=beforeK;
     } else {
+        pno=0;
         k=0;
     }
     cout<<endl;
     cout<<'+';
-    flag=false;
-    printLine3(w,k,manip,delta,flag,newLine);
+    printLine3(w,k,manip,delta,newLine,pno);
     if(!newLine[k-1] && changed){
         k=beforeK;
+        pno=beforeK;
     } else {
+        pno=0;
         k=0;
     }
     cout<<endl;
     cout<<gchart[k];
-    flag=false;
-    printLine4(w,gchart,k,manip,delta,flag,newLine);
+    printLine4(w,gchart,k,manip,delta,newLine,pno);
     cout<<endl;
 }
 
@@ -241,14 +216,15 @@ void printGanttChart(int arr[],int elem[],int bt[], string pname[], vector<int> 
     int sum=0;
     for(int i=0;i<manip;i++){
         sum+=w[i][0];
-        if(sum>=50){
+        if(sum>=40){
             newLine[i+1]=true;
             sum=0;
         }
     }
+    int pno=0;
     cout<<"GANTT CHART :"<<endl;
     while(k!=manip){
-        printLines(w,gchart,pname,k,manip,delta,newLine); 
+        printLines(w,gchart,pname,k,manip,delta,newLine,pno); 
     }
 }
 
@@ -266,6 +242,7 @@ void getCalc(vector<Process> P){
 }
 
 int main() {
+    cout<<endl;
     cout<<"+----------------------------+"<<endl;
     cout<<"  Enter no. of process(s) : ";
     cin>>n;
@@ -304,7 +281,9 @@ int main() {
         s.insert(at[i]);
     }
     bool flag;
+    int constant;
     if(s.size()==1){
+        constant = at[0];
         flag = true;
     }
     for(int i=0;i<n;i++){
@@ -316,29 +295,23 @@ int main() {
         }
         arr[i] = index;
         elem[i] = at[index];
-        m[elem[i]] = true;
+        m[arr[i]] = true;
         pname[i] = "P" + to_string(index+1);
-        if(m[at[index]]==true){
+        if(m[arr[index]]==true){
             at[index]=INT_MAX;
         }
     }
     vector<int> gchart;
-
-    if(elem[0]!=0)
-        gchart.push_back(elem[0]);
-    else
-        gchart.push_back(0);
-    
-    int k = 0;
     vector<bool> delta;
-
+    gchart.push_back(elem[0]);
+    int k = 0;
     for(int i=1;i<=n;i++){
         gchart.push_back(0);
         gchart[gchart.size()-1] = gchart[gchart.size()-2];
         if(gchart[gchart.size()-1]!=0 && gchart[gchart.size()-1]<elem[k]){
             int j = elem[k]-gchart[gchart.size()-1];
             while(j>0){
-                gchart[gchart.size()-1] ++;
+                gchart[gchart.size()-1]++;
                 j--;
             }
             gchart.push_back(gchart[gchart.size()-1]);
