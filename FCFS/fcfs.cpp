@@ -297,7 +297,7 @@ int main() {
         elem[i] = at[index];
         m[arr[i]] = true;
         pname[i] = "P" + to_string(index+1);
-        if(m[arr[index]]==true){
+        if(m[index]==true){
             at[index]=INT_MAX;
         }
     }
